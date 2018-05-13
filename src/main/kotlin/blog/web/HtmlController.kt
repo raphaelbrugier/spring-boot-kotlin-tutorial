@@ -10,14 +10,17 @@ import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import blog.User
+import blog.BlogProperties
 
 @Controller
 class HtmlController(private val repository: ArticleRepository,
-                     private val markdownConverter: MarkdownConverter) {
+                     private val markdownConverter: MarkdownConverter,
+                     private val properties: BlogProperties) {
 
     @GetMapping("/")
     fun blog(model: Model): String {
-        model["title"] = "Blog"
+        model["title"] = properties.title
+        model["banner"] = properties.banner
         model["articles"] = repository.findAllByOrderByAddedAtDesc().map { it.render() }
         return "blog"
     }
